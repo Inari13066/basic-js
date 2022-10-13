@@ -15,37 +15,40 @@ function getSeason(date) {
   if (date == undefined) {
     return "Unable to determine the time of year!";
   }
-  if (!date instanceof Date) {
-    throw new Error("Invalid date");
+  if (date instanceof Date) {
+    console.log(date.getMonth());
+    switch (date.getMonth()) {
+      case 0:
+      case 1:
+      case 11:
+        return "winter";
+        break;
+      case 2:
+      case 3:
+      case 4:
+        return "spring";
+        break;
+      case 5:
+      case 6:
+      case 7:
+        return "summer";
+        break;
+      case 8:
+      case 9:
+      case 10:
+        return "autumn";
+        break;
+    }
   }
-  console.log(date.getMonth());
-  switch (date.getMonth()) {
-    case 0:
-    case 1:
-    case 11:
-      return "winter";
-      break;
-    case 2:
-    case 3:
-    case 4:
-      return "spring";
-      break;
-    case 5:
-    case 6:
-    case 7:
-      return "summer";
-      break;
-    case 8:
-    case 9:
-    case 10:
-      return "autumn";
-      break;
-  }
+  return "Invalid date!";
 }
 
 module.exports = {
   getSeason,
 };
 
-let testDate = new Date(2019, 11, 22, 23, 45, 11, 500);
-console.log(getSeason(testDate));
+console.log(getSeason(() => new Date()));
+console.log(getSeason("foo"));
+console.log(getSeason({ John: "Smith" }));
+console.log(getSeason(20192701));
+console.log(getSeason([2019, "27", 0 + "1"]));
