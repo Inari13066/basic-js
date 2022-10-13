@@ -15,7 +15,7 @@ function getSeason(date) {
   if (date == undefined) {
     return "Unable to determine the time of year!";
   }
-  if (date instanceof Date) {
+  if (date instanceof Date && Object.getOwnPropertyNames(date).length == 0) {
     console.log(date.getMonth());
     switch (date.getMonth()) {
       case 0:
@@ -40,15 +40,25 @@ function getSeason(date) {
         break;
     }
   }
-  return "Invalid date!";
+  throw new Error("Invalid date!");
 }
 
 module.exports = {
   getSeason,
 };
 
-console.log(getSeason(() => new Date()));
-console.log(getSeason("foo"));
-console.log(getSeason({ John: "Smith" }));
-console.log(getSeason(20192701));
-console.log(getSeason([2019, "27", 0 + "1"]));
+const fakeDate = {
+  toString() {
+    return Date.prototype.toString.call(new Date());
+  },
+  [Symbol.toStringTag]: "Date",
+};
+
+const realDate = new Date((1582, 5, 24, 3, 30, 22, 496));
+
+Object.setPrototypeOf(fakeDate, Object.getPrototypeOf(new Date()));
+
+// console.log(getSeason("foo"));
+// console.log(getSeason({ John: "Smith" }));
+// console.log(getSeason(20192701));
+// console.log(getSeason());
